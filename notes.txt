@@ -1,0 +1,56 @@
+- every field in the schema has a type
+- aliasing githubid: id (clients have control over the response)
+- graphql fragments: 
+
+fragment UserInfo on GithubUser {
+    id
+    company
+    avatar_url
+}
+
+- partial operation, cannot be used on it's own
+
+
+gituhb {
+    user1: user($username1) {
+        ...UserInfo
+    }
+    user2: user($username1) {
+        ...UserInfo
+    }
+}
+
+
+const RootQueryType = new GraphQLObjectType({
+    name: 'RootQueryType'
+    description: 'defines all possible starting points'
+
+    fields: {
+        hello: {
+            type: GraphQLString,
+            resolve: () => {
+                return 'world'
+            }
+        }
+    }
+})
+
+organize files:
+    config
+    database
+    lib
+        import schema
+        graphql executer function  --> graphql() this runs the query
+    schema
+
+GraphQLList to handle arrays
+
+createUser (name: "test", email: "test@test.com", password: "pass",
+        street: "123 Street",
+        cityState: "City, State", 
+        zip: 95014,
+        picUrl: "https://s3-us-west-1.amazonaws.com/pictures-lokal/24303501016_4bf7c90de8_o+(2).jpg",
+        bio: "I am a test user")
+  {
+  	
+  }
