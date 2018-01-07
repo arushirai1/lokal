@@ -8,13 +8,13 @@ import configMongo from './config/mongo'
 
 import schema from './schema/index'
 
+
 const GRAPHQL_PORT = 3000;
 
 const graphQLServer = express();
 
 mongodb.MongoClient.connect(configMongo.url, (err, mongo) => {
   assert.equal(null, err);
-
   graphQLServer.use('/graphql', bodyParser.json(), graphqlHttp({ 
     context: {mongo}, 
     schema: schema,

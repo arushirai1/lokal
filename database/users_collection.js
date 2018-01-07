@@ -2,10 +2,12 @@
 import mongodb from 'mongodb';
 import {BSONtoObject} from '../lib/utils'
 
+const USER_COLLECTION = "users";
+
 export async function getUser(id, db) {
     try {
         const query = {"email": id};
-        const doc = await db.collection("users").findOne({"email": id});
+        const doc = await db.collection(USER_COLLECTION).findOne({"email": id});
         return BSONtoObject(doc);
     } catch(e) {
         console.log("Error in getUser(): " + e);
@@ -24,7 +26,7 @@ export async function createUser(db, {name, email, password, street, cityState, 
         bio: bio
     }
     try {
-        const doc = await db.collection("users").insertOne(user);
+        const doc = await db.collection(USER_COLLECTION).insertOne(user);
         return BSONtoObject(doc);
     } catch (e) {
 

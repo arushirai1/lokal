@@ -1,8 +1,9 @@
 import graphql from 'graphql';
 import {  GraphQLObjectType, GraphQLString, GraphQLInt} from 'graphql';
 import {GraphQLEmail, GraphQLURL} from 'graphql-custom-types'
+import {getUser} from '../../database/users_collection'
 
-module.exports = new GraphQLObjectType( {
+const UserType = new GraphQLObjectType( {
     name: 'UserType',
     fields: {
         name: {type: GraphQLString},
@@ -15,3 +16,15 @@ module.exports = new GraphQLObjectType( {
         bio: {type: GraphQLString}
     }
 })
+
+export const UserQuery = {
+    type: UserType,
+    args: {
+      email: { type: GraphQLEmail }
+    },
+    resolve: (obj, { email }, { mongo }) => {
+      return getUser(email, mongo);
+    }
+  };
+
+export default UserType;
