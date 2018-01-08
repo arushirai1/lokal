@@ -12,15 +12,24 @@ import { GraphQLEmail, GraphQLURL } from "graphql-custom-types";
 import UserType from "../types/user";
 import { createUser } from "../../database/users_collection";
 
-export const UserInputType = new GraphQLInputObjectType({
+/*        _id: {type: GraphQLID},
+        name: {type: GraphQLString},
+        email: {type: GraphQLEmail},
+        password: {type: GraphQLString},
+        zip: {type: GraphQLInt},
+        phone: {type: GraphQLString},
+        picUrl: {type: GraphQLURL},
+        bio: {type: GraphQLString},
+        addr: {type: GraphQLString},
+*/
+const UserInputType = new GraphQLInputObjectType({
   name: "UserInputType",
   fields: {
     name: { type: new GraphQLNonNull(GraphQLString) },
     email: { type: new GraphQLNonNull(GraphQLEmail) },
     password: { type: new GraphQLNonNull(GraphQLString) },
-    street: { type: new GraphQLNonNull(GraphQLString) },
-    cityState: { type: new GraphQLNonNull(GraphQLString) },
-    zip: { type: new GraphQLNonNull(GraphQLInt) },
+    zip: { type: new GraphQLNonNull(GraphQLString)},
+    phone: {type: new GraphQLNonNull(GraphQLString)},
     picUrl: { type: GraphQLURL },
     bio: { type: GraphQLString }
   }
