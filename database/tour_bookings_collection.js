@@ -1,5 +1,4 @@
 import {BSONtoObject} from '../lib/utils'
-
 const TOUR_BOOKINGS_COLLECTION = "tour_bookings";
 
 export async function getTourBooking(db, datetime, tourid) {
