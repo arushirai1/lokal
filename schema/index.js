@@ -13,6 +13,7 @@ import {
 import { GraphQLEmail, GraphQLURL } from "graphql-custom-types";
 import {UserCreationType, UserInputType} from "./mutations/create-user";
 import UserMutation from "./mutations/create-user";
+import TourMutation from "./mutations/create-tour"
 
 import {TourQuery} from './types/tour';
 import UserType, {UserQuery} from "./types/user";
@@ -32,7 +33,8 @@ const queryType = new GraphQLObjectType({
 const mutationType = new GraphQLObjectType({
   name: "RootMutation",
   fields: {
-    createUser: UserMutation
+    createUser: UserMutation,
+    createTour: TourMutation
   }
 });
 //
