@@ -15,7 +15,7 @@ import {TourType} from "../types/tour";
 import { createTour } from "../../database/tours_collection";
 import {GraphQLDateTime} from 'graphql-iso-date'
 
-const LocationInputType = new GraphQLInputObjectType({
+export const LocationInputType = new GraphQLInputObjectType({
     name: 'LocationInputType',
     fields: {
         lat: {type: GraphQLFloat},
