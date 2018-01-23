@@ -3,7 +3,7 @@ import {GraphQLID, GraphQLObjectType, GraphQLString, GraphQLInt} from 'graphql';
 import {GraphQLEmail, GraphQLURL} from 'graphql-custom-types'
 import {getUser} from '../../database/users_collection'
 
-const UserType = new GraphQLObjectType( {
+export const UserType = new GraphQLObjectType( {
     name: 'UserType',
     fields: {
         _id: {type: GraphQLID},
@@ -28,4 +28,3 @@ export const UserQuery = {
     }
   };
 
-export default UserType;

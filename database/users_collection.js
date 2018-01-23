@@ -9,7 +9,7 @@ export async function getUser(id, db) {
     try {
         const query = {"email": id};
         const doc = await db.collection(USER_COLLECTION).findOne({"email": id});
-        return BSONtoObject(doc);
+        return BSONtoObject(doc, "getUser()");
     } catch(e) {
         console.log("Error in getUser(): " + e);
     }
@@ -47,7 +47,7 @@ export async function createUser(db, {name, email, password, zip, picUrl, bio, p
           "addr"
         });*/
         const doc = await db.collection(USER_COLLECTION).insertOne(user);
-        return BSONtoObject(doc);
+        return BSONtoObject(doc, "createUser()");
     } catch (e) {
 
     }

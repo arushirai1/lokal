@@ -9,38 +9,36 @@ export async function getTour(db, id) {
     try {
         const query = {"_id": new ObjectID(id)};
         const doc = await db.collection(TOURS_COLLECTION).findOne(query);
-        return BSONtoObject(doc);
+        return BSONtoObject(doc, "getTour");
     } catch(e) {
         console.log("Error in getTour(): " + e);
     }
 }
 
-function getDistance(lat1, long1, lat2, long2) {
-    let earthRadius = 6371000; // meters
-    let dLat = Math.toRadians(lat2 - lat1);
-    let dLng = Math.toRadians(long2 - long1);
-    let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1))
-            * Math.cos(Math.toRadians(long1)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
-    let c = 2 * Math.atan2(Math.sqrt(Math.abs(a)), Math.sqrt(Math.abs(1 - a)));
-    let dist = (float) (earthRadius * c);
-
-    return dist;
-}
 export async function getTourList(db, {limit, location, categories, maxDist, minDate, maxDate}) {
     try {
-        const query = {$where: () => {
-            return getDistance(
-                this.path[0].lat, 
-                this.path[0].lon,
-                location.lat,
-                location.lon) < maxDist}};
-        let categoryIds = [];
+        const agg = [
+            {$geoNear: 
+                {near: {type: "Point", coordinates: [location.lon, location.lat]},
+                distanceField: "dist.calculated",
+                maxDistance: 2,
+                includeLocs: "dist.location",
+                num: 5,
+                spherical: true}},
+            {$unwind: "$categoryId"},
+            {$lookup:{from: "categories", localField:"categoryId", foreignField:"_id", as: "category"}},
+            {$lookup:{from: "users", localField:"userId", foreignField:"_id", as: "user"}},
+            {$unwind: "$category"},
+            {$unwind: "$user"}
+            ];
+/*        let categoryIds = [];
         for(let i=0; i<categories.length; i++) {
             categoryIds[i] = getCategoryId(db, categories[i]);
         }
-        const catQuery = {"categoryId": {'$in': categoryIds}, "specificDates": {'$gte': minDate, '$lte': maxDate}}
-        const doc = await db.collection(TOURS_COLLECTION).find({$and: [catQuery, query]}).toArray()//.skip(limit).limit(10);
-        return BSONtoObject(doc);
+        const catQuery = {"categoryId": {'$in': categoryIds}, "specificDates": {'$gte': minDate, '$lte': maxDate}}*/
+        const doc = await db.collection(TOURS_COLLECTION).aggregate(agg).toArray()//.skip(limit).limit(10);
+        const obj = BSONtoObject(doc, "getTourList");
+        return obj;
     } catch (e) {
         console.log("Error in getTourList(): " + e);
     }
@@ -73,7 +71,7 @@ export async function createTour(db, {title, path, userId, categoryName, info, m
         }
 
         const doc = await db.collection(TOURS_COLLECTION).insertOne(tour);
-        return BSONtoObject(doc);
+        return BSONtoObject(doc, "createTour()");
     } catch (e) {
         console.log("Error in createTour(): " + e);
     }

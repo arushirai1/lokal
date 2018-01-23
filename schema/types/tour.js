@@ -3,7 +3,8 @@ import {GraphQLID, GraphQLBoolean, GraphQLList, GraphQLObjectType, GraphQLString
 import {getTour} from '../../database/tours_collection';
 import { GraphQLURL } from 'graphql-custom-types';
 import {GraphQLDateTime} from 'graphql-iso-date'
-
+import {UserType} from './user'
+import {CategoryType} from './category'
 export const InfoType = new GraphQLObjectType ({
     name: 'InfoType',
     description: 'This contains the actual content of tour',
@@ -42,14 +43,23 @@ export const RepeatableType = new GraphQLObjectType({
     }
 })
 
+export const DistType = new GraphQLObjectType({
+    name: 'DistType',
+    description: 'Holds the attribute which determines the distance from selected point',
+    fields: {
+        calculated: {type: GraphQLFloat},
+    }
+})
+
 export const TourType = new GraphQLObjectType ({
     name: 'TourType',
     fields: {
         _id: {type: GraphQLID},
         title: {type: GraphQLString},
         path: {type: new GraphQLList(LocationType)},
-        userId: {type: GraphQLID},
-        categoryId: {type: GraphQLID},
+        user: {type: UserType},
+        category: {type: CategoryType},
+        dist: {type: DistType},
         summary: {type: SummaryType},
         info: {type: InfoType},
         maxUsers: {type: GraphQLInt},
